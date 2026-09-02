@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maktaba — USB Storage Plan</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --border: #2d3a4f;
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --warn: #d29922;
+      --danger: #f85149;
+      --purple: #bc8cff;
+      --radius: 12px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --mono: "Cascadia Code", "Fira Code", "Consolas", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* subtle grid background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(88,166,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88,166,255,.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2.5rem 1rem;
+      background: linear-gradient(135deg, var(--surface) 0%, #1e2a3a 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    header .badge {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(88,166,255,.12);
+      border: 1px solid rgba(88,166,255,.25);
+      padding: .35rem .75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+    }
+
+    header p {
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+
+    section {
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    h2 .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: .85rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 6px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 1.25rem 0 .75rem;
+      color: var(--accent);
+    }
+
+    p { margin-bottom: .75rem; color: var(--muted); }
+    p strong { color: var(--text); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card.highlight {
+      border-color: rgba(88,166,255,.4);
+      background: linear-gradient(135deg, rgba(88,166,255,.06) 0%, var(--surface) 100%);
+    }
+
+    .card.danger {
+      border-color: rgba(248,81,73,.4);
+      background: linear-gradient(135deg, rgba(248,81,73,.08) 0%, var(--surface) 100%);
+    }
+
+    .card.success {
+      border-color: rgba(63,185,80,.4);
+      background: linear-gradient(135deg, rgba(63,185,80,.06) 0%, var(--surface) 100%);
+    }
+
+    /* rule banner */
+    .rule-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(90deg, rgba(248,81,73,.15), rgba(248,81,73,.05));
+      border: 1px solid rgba(248,81,73,.35);
+      border-radius: var(--radius);
+      margin-bottom: 2rem;
+    }
+
+    .rule-banner .icon {
+      font-size: 2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .rule-banner h2 { margin: 0 0 .25rem; font-size: 1.1rem; color: var(--danger); }
+    .rule-banner p { margin: 0; color: var(--text); }
+
+    /* mermaid containers */
+    .diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .diagram .mermaid { display: flex; justify-content: center; }
+
+    /* SVG arch diagram */
+    .arch-svg {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    /* comparison grid */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .compare-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      position: relative;
+      transition: transform .15s, border-color .15s;
+    }
+
+    .compare-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .compare-card.recommended {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 1px rgba(63,185,80,.2);
+    }
+
+    .compare-card.recommended::after {
+      content: "Recommended";
+      position: absolute;
+      top: -.6rem;
+      right: .75rem;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      background: var(--accent2);
+      color: var(--bg);
+      padding: .2rem .5rem;
+      border-radius: 4px;
+    }
+
+    .compare-card .title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: .5rem;
+    }
+
+    .compare-card .stars { color: var(--warn); font-size: .85rem; margin-bottom: .75rem; }
+
+    .compare-card ul {
+      list-style: none;
+      font-size: .875rem;
+      color: var(--muted);
+    }
+
+    .compare-card li {
+      padding: .25rem 0;
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    .compare-card li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* data placement table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: .75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .2rem .5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .tag.usb { background: rgba(188,140,255,.2); color: var(--purple); }
+    .tag.local { background: rgba(63,185,80,.2); color: var(--accent2); }
+    .tag.never { background: rgba(248,81,73,.2); color: var(--danger); }
+
+    /* folder tree */
+    .tree {
+      font-family: var(--mono);
+      font-size: .85rem;
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      color: #c9d1d9;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .tree .dir { color: var(--accent); }
+    .tree .comment { color: var(--muted); font-style: italic; }
+
+    /* code blocks */
+    pre {
+      font-family: var(--mono);
+      font-size: .8rem;
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      color: #c9d1d9;
+      margin: .75rem 0;
+    }
+
+    pre .kw { color: #ff7b72; }
+    pre .str { color: #a5d6ff; }
+    pre .cm { color: #8b949e; }
+
+    /* phase timeline */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: .55rem;
+      top: .5rem;
+      bottom: .5rem;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+    }
+
+    .phase {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .phase::before {
+      content: "";
+      position: absolute;
+      left: -1.65rem;
+      top: 1.25rem;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .phase:nth-child(2)::before { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+    .phase:nth-child(3)::before { background: var(--accent2); box-shadow: 0 0 0 2px var(--accent2); }
+
+    .phase .label {
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin-bottom: .25rem;
+    }
+
+    .phase h3 { margin: 0 0 .5rem; color: var(--text); font-size: 1rem; }
+    .phase ol { margin: .5rem 0 0 1.25rem; color: var(--muted); font-size: .9rem; }
+    .phase li { margin: .25rem 0; }
+
+    /* disk gauge visual */
+    .disk-visual {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      align-items: stretch;
+      margin: 1.5rem 0;
+    }
+
+    .disk-box {
+      flex: 1;
+      min-width: 200px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .disk-box .label-small {
+      font-size: .75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: .5rem;
+    }
+
+    .gauge {
+      height: 12px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: .75rem 0;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width .5s;
+    }
+
+    .gauge-fill.bad { background: linear-gradient(90deg, var(--warn), var(--danger)); width: 92%; }
+    .gauge-fill.good { background: linear-gradient(90deg, var(--accent2), #56d364); width: 55%; }
+
+    .disk-box .pct {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .disk-box .pct.bad { color: var(--danger); }
+    .disk-box .pct.good { color: var(--accent2); }
+
+    .arrow-between {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .arrow-between { transform: rotate(90deg); width: 100%; }
+      .disk-visual { flex-direction: column; }
+    }
+
+    /* fs matrix */
+    .fs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: .75rem;
+      margin: 1rem 0;
+    }
+
+    .fs-item {
+      padding: .75rem;
+      border-radius: 8px;
+      text-align: center;
+      font-size: .85rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+
+    .fs-item.yes { background: rgba(63,185,80,.15); border-color: var(--accent2); color: var(--accent2); }
+    .fs-item.no { background: rgba(248,81,73,.1); border-color: rgba(248,81,73,.3); color: var(--danger); }
+    .fs-item.me { background: rgba(88,166,255,.15); border-color: var(--accent); color: var(--accent); }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: .85rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .nav-toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .nav-toc a {
+      font-size: .8rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: .4rem .75rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: all .15s;
+    }
+
+    .nav-toc a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(88,166,255,.08);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="badge">Maktaba · Infrastructure Plan</div>
+      <h1>USB Storage Architecture</h1>
+      <p>How to attach an external USB drive on the Proxmox host and share it safely across VMs — with unplug and power-loss resilience.</p>
+    </header>
+
+    <nav class="nav-toc">
+      <a href="#rule">Core rule</a>
+      <a href="#problem">Problem</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#layout">Folder layout</a>
+      <a href="#filesystem">Filesystem</a>
+      <a href="#resilience">Resilience</a>
+      <a href="#data">What goes where</a>
+      <a href="#options">Options</a>
+      <a href="#phases">Implementation</a>
+    </nav>
+
+    <!-- CORE RULE -->
+    <div class="rule-banner" id="rule">
+      <div class="icon">⛔</div>
+      <div>
+        <h2>Core rule — non-negotiable</h2>
+        <p><strong>Only one system may mount the USB disk as a block device.</strong> Passing the same <code>/dev/sdX</code> to multiple VMs simultaneously will corrupt the filesystem. To share across guests, mount once on the Proxmox host and export via NFS/SMB (or bind-mount into LXCs).</p>
+      </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <section id="problem">
+      <h2><span class="num">1</span> The problem today</h2>
+      <div class="disk-visual">
+        <div class="disk-box">
+          <div class="label-small">CT root disk (47 GB)</div>
+          <div class="pct bad">92%</div>
+          <div class="gauge"><div class="gauge-fill bad"></div></div>
+          <div style="font-size:.85rem;color:var(--muted)">~17 GB media + ES + cache</div>
+        </div>
+        <div class="arrow-between">→</div>
+        <div class="disk-box">
+          <div class="label-small">After moving media to USB</div>
+          <div class="pct good">~55%</div>
+          <div class="gauge"><div class="gauge-fill good"></div></div>
+          <div style="font-size:.85rem;color:var(--muted)">ES stays local &amp; healthy</div>
+        </div>
+      </div>
+      <div class="card">
+        <p><strong>Maktaba</strong> runs as an LXC container (<code>192.168.11.141</code>). The USB drive is attached to the <strong>Proxmox host</strong>, not the container. Other VMs on the same host should also be able to use the drive.</p>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="architecture">
+      <h2><span class="num">2</span> Recommended architecture</h2>
+      <p>Host mount + NFS export + bind mount into the Maktaba LXC for media only.</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+flowchart TB
+  subgraph host["Proxmox Host"]
+    USB["🔌 USB HDD\n(ext4)"]
+    MNT["/mnt/usb-data"]
+    NFS["NFS Export"]
+    USB --> MNT --> NFS
+  end
+
+  subgraph maktaba["maktaba LXC"]
+    BIND["bind mount\n→ /srv/maktaba/data/media"]
+    DOCKER["Docker stack"]
+    BIND --> DOCKER
+  end
+
+  subgraph others["Other VMs"]
+    VM1["VM 1\nNFS client"]
+    VM2["VM 2\nNFS client"]
+  end
+
+  MNT -. "pct set -mp1" .-> BIND
+  NFS --> VM1
+  NFS --> VM2
+
+  style USB fill:#bc8cff33,stroke:#bc8cff
+  style MNT fill:#58a6ff33,stroke:#58a6ff
+  style BIND fill:#3fb95033,stroke:#3fb950
+        </div>
+      </div>
+
+      <div class="card highlight success">
+        <h3 style="margin-top:0;color:var(--accent2)">Why this pattern?</h3>
+        <ul style="color:var(--muted);margin-left:1.25rem;font-size:.9rem">
+          <li>Single writer to the block device — no corruption risk</li>
+          <li>Other VMs mount <code>proxmox-ip:/mnt/usb-data/shared</code> over NFS</li>
+          <li>Maktaba uses a host bind mount (simpler permissions than NFS inside unprivileged LXC)</li>
+          <li>Elasticsearch, Redis, and configs stay on fast local CT disk</li>
+        </ul>
+      </div>
+
+      <!-- inline SVG fallback visual -->
+      <svg class="arch-svg" viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" aria-label="Data flow diagram">
+        <defs>
+          <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#bc8cff"/>
+            <stop offset="100%" style="stop-color:#58a6ff"/>
+          </linearGradient>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#58a6ff"/>
+          </marker>
+        </defs>
+        <!-- USB -->
+        <rect x="20" y="80" width="100" height="60" rx="8" fill="#1a2332" stroke="#bc8cff" stroke-width="2"/>
+        <text x="70" y="105" text-anchor="middle" fill="#bc8cff" font-size="12" font-weight="600">USB HDD</text>
+        <text x="70" y="122" text-anchor="middle" fill="#8b9cb3" font-size="10">ext4</text>
+        <!-- Host mount -->
+        <rect x="160" y="80" width="120" height="60" rx="8" fill="#1a2332" stroke="#58a6ff" stroke-width="2"/>
+        <text x="220" y="105" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="600">/mnt/usb-data</text>
+        <text x="220" y="122" text-anchor="middle" fill="#8b9cb3" font-size="10">Proxmox host</text>
+        <!-- NFS -->
+        <rect x="320" y="80" width="100" height="60" rx="8" fill="#1a2332" stroke="#58a6ff" stroke-width="2"/>
+        <text x="370" y="110" text-anchor="middle" fill="#58a6ff" font-size="11" font-weight="600">NFS</text>
+        <!-- Maktaba -->
+        <rect x="460" y="30" width="130" height="55" rx="8" fill="#1a2332" stroke="#3fb950" stroke-width="2"/>
+        <text x="525" y="55" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">maktaba LXC</text>
+        <text x="525" y="72" text-anchor="middle" fill="#8b9cb3" font-size="9">bind → data/media</text>
+        <!-- Other VMs -->
+        <rect x="460" y="130" width="130" height="55" rx="8" fill="#1a2332" stroke="#d29922" stroke-width="2"/>
+        <text x="525" y="155" text-anchor="middle" fill="#d29922" font-size="11" font-weight="600">Other VMs</text>
+        <text x="525" y="172" text-anchor="middle" fill="#8b9cb3" font-size="9">NFS client</text>
+        <!-- Local disk -->
+        <rect x="640" y="30" width="130" height="55" rx="8" fill="#1a2332" stroke="#3fb950" stroke-width="2"/>
+        <text x="705" y="52" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Local CT disk</text>
+        <text x="705" y="68" text-anchor="middle" fill="#8b9cb3" font-size="9">ES · Redis · config</text>
+        <!-- Arrows -->
+        <line x1="120" y1="110" x2="158" y2="110" stroke="url(#g1)" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="280" y1="110" x2="318" y2="110" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="420" y1="100" x2="458" y2="58" stroke="#3fb950" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="420" y1="120" x2="458" y2="158" stroke="#d29922" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="590" y1="58" x2="638" y2="58" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrow)"/>
+        <text x="614" y="48" text-anchor="middle" fill="#8b9cb3" font-size="8">stays local</text>
+      </svg>
+    </section>
+
+    <!-- FOLDER LAYOUT -->
+    <section id="layout">
+      <h2><span class="num">3</span> Folder layout on the host</h2>
+      <div class="tree">
+<span class="dir">/mnt/usb-data/</span>
+├── <span class="dir">maktaba/media/</span>      <span class="comment">← TubeArchivist video files (~17 GB today, will grow)</span>
+├── <span class="dir">shared/</span>             <span class="comment">← other VMs / general LAN use</span>
+└── <span class="dir">backups/</span>            <span class="comment">← optional: vzdump, backup.sh targets</span>
+      </div>
+
+      <h3>Host fstab entry</h3>
+      <pre><span class="cm"># /etc/fstab on Proxmox host — use UUID, not /dev/sdX</span>
+<span class="str">UUID=&lt;uuid&gt;</span>  <span class="str">/mnt/usb-data</span>  <span class="kw">ext4</span>  <span class="kw">defaults,noatime,nofail,x-systemd.device-timeout=10s</span>  0  2</pre>
+
+      <h3>Bind mount into Maktaba LXC</h3>
+      <pre><span class="cm"># On Proxmox host</span>
+<span class="kw">pct set</span> &lt;maktaba-ctid&gt; -mp1 /mnt/usb-data/maktaba/media,mp=/srv/maktaba/data/media,backup=0</pre>
+    </section>
+
+    <!-- FILESYSTEM -->
+    <section id="filesystem">
+      <h2><span class="num">4</span> Filesystem choice</h2>
+      <div class="fs-grid">
+        <div class="fs-item yes">✓ ext4<br><small style="font-weight:400;opacity:.8">Recommended</small></div>
+        <div class="fs-item me">~ xfs<br><small style="font-weight:400;opacity:.8">OK, no advantage</small></div>
+        <div class="fs-item no">✗ ntfs/exfat</div>
+        <div class="fs-item no">✗ ZFS on USB</div>
+      </div>
+      <div class="card">
+        <p><strong>ext4</strong> — journaling, fast recovery after power loss, well understood on Linux. Use <strong><code>/dev/disk/by-id/usb-...</code></strong> for partitioning (not <code>/dev/sdb</code>, which can change after reboot).</p>
+      </div>
+      <pre><span class="kw">sudo</span> parted /dev/disk/by-id/usb-... mklabel gpt
+<span class="kw">sudo</span> parted /dev/disk/by-id/usb-... mkpart primary ext4 0% 100%
+<span class="kw">sudo</span> mkfs.ext4 -L usb-data /dev/disk/by-id/usb-...-part1</pre>
+    </section>
+
+    <!-- RESILIENCE -->
+    <section id="resilience">
+      <h2><span class="num">5</span> Unplug &amp; power-loss resilience</h2>
+      <p>USB will eventually disappear. Design for <strong>graceful degradation</strong>, not hot-swappable convenience.</p>
+
+      <div class="diagram">
+        <div class="mermaid">
+stateDiagram-v2
+  direction LR
+  [*] --> Attached: USB plugged in
+  Attached --> Missing: Unplug / power loss
+  Missing --> Attached: Reconnect + mount
+
+  state Attached {
+    [*] --> Serving
+    Serving: NFS + bind mount active
+    Serving: Downloads & playback OK
+  }
+
+  state Missing {
+    [*] --> Degraded
+    Degraded: nofail → host still boots
+    Degraded: ES/Redis/config on local disk OK
+    Degraded: Media I/O fails gracefully
+  }
+
+  note right of Missing
+    Active writes may fail.
+    Run umount before unplugging.
+  end note
+        </div>
+      </div>
+
+      <div class="compare-grid">
+        <div class="card" style="margin:0">
+          <h3 style="margin-top:0">✓ Do</h3>
+          <ul style="color:var(--muted);margin-left:1.25rem;font-size:.9rem">
+            <li><code>nofail</code> in fstab — host boots without USB</li>
+            <li><code>umount</code> before physical unplug</li>
+            <li>udev rules to stop/start containers on disconnect</li>
+            <li>SMART monitoring (<code>smartctl</code>)</li>
+            <li>Keep backups — USB ≠ backup</li>
+          </ul>
+        </div>
+        <div class="card danger" style="margin:0">
+          <h3 style="margin-top:0;color:var(--danger)">✗ Don't</h3>
+          <ul style="color:var(--muted);margin-left:1.25rem;font-size:.9rem">
+            <li>Hot-unplug while writes are active</li>
+            <li>Put Elasticsearch on USB</li>
+            <li>Use <code>soft</code> NFS for media writes</li>
+            <li>Mount same block device in 2 VMs</li>
+            <li>Store VM disk images (qcow) on USB</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Safe unplug procedure</h3>
+      <pre><span class="kw">sync</span>
+<span class="kw">sudo</span> umount /mnt/usb-data
+<span class="kw">sudo</span> udisksctl power-off -b /dev/disk/by-id/usb-...</pre>
+
+      <h3>NFS mount for other VMs</h3>
+      <pre><span class="cm"># /etc/fstab on a VM — hard mount for data integrity</span>
+proxmox-ip:/mnt/usb-data/shared  /mnt/shared  <span class="kw">nfs</span>  <span class="kw">vers=4.1,_netdev,hard,noatime,nofail,x-systemd.automount</span>  0  0</pre>
+    </section>
+
+    <!-- DATA PLACEMENT -->
+    <section id="data">
+      <h2><span class="num">6</span> What goes where</h2>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Location</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Media files</strong> <code>data/media</code></td>
+              <td><span class="tag usb">USB</span></td>
+              <td>Large, append-mostly — solves 92% disk problem</td>
+            </tr>
+            <tr>
+              <td><strong>Elasticsearch</strong> <code>data/es</code></td>
+              <td><span class="tag local">Local CT disk</span></td>
+              <td>Latency-sensitive; already locked at 95% full</td>
+            </tr>
+            <tr>
+              <td><strong>Redis, ta-cache, Jellyfin config</strong></td>
+              <td><span class="tag local">Local CT disk</span></td>
+              <td>Small, I/O-heavy, must survive USB loss</td>
+            </tr>
+            <tr>
+              <td><strong>Docker images</strong></td>
+              <td><span class="tag never">Never USB</span></td>
+              <td>Performance &amp; reliability</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="diagram" style="margin-top:1.5rem">
+        <div class="mermaid">
+pie title Storage allocation after migration
+  "Media on USB" : 17
+  "ES + cache + config (local)" : 5
+  "Free space on CT disk" : 21
+        </div>
+      </div>
+    </section>
+
+    <!-- OPTIONS COMPARE -->
+    <section id="options">
+      <h2><span class="num">7</span> Options compared</h2>
+      <div class="compare-grid">
+        <div class="compare-card recommended">
+          <div class="title">Host + NFS + bind</div>
+          <div class="stars">★★★★★ sharing · ★★★★ resilience · ★★★ complexity</div>
+          <ul>
+            <li>Best for mixed VMs + LXCs</li>
+            <li>Low overhead</li>
+            <li>Maktaba bind mount is simple</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="title">OMV VM + passthrough</div>
+          <div class="stars">★★★★★ sharing · ★★★★★ USB handling · ★★★★ complexity</div>
+          <ul>
+            <li>Best if USB unplugged often</li>
+            <li>Nice NAS UI for shares</li>
+            <li>Extra RAM/CPU for VM</li>
+          </ul>
+        </div>
+        <div class="compare-card">
+          <div class="title">USB passthrough to Maktaba only</div>
+          <div class="stars">★ sharing · ★★ resilience · ★ complexity</div>
+          <ul>
+            <li>One consumer only</li>
+            <li>Fragile with disconnects</li>
+            <li>Other VMs can't share</li>
+          </ul>
+        </div>
+        <div class="compare-card" style="border-color:rgba(248,81,73,.4)">
+          <div class="title" style="color:var(--danger)">Same USB → multiple VMs</div>
+          <div class="stars" style="color:var(--danger)">⛔ Do not do this</div>
+          <ul>
+            <li>Filesystem corruption</li>
+            <li>Proxmox GUI allows it — don't</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPLEMENTATION PHASES -->
+    <section id="phases">
+      <h2><span class="num">8</span> Implementation phases</h2>
+      <div class="timeline">
+        <div class="phase">
+          <div class="label">Phase 1 · Proxmox host</div>
+          <h3>Prepare &amp; mount USB</h3>
+          <ol>
+            <li>Identify disk: <code>lsblk -f</code> and <code>ls -l /dev/disk/by-id/usb-*</code></li>
+            <li>Partition + format ext4</li>
+            <li>Mount at <code>/mnt/usb-data</code> with fstab (<code>nofail</code>)</li>
+            <li>Create <code>maktaba/media</code>, <code>shared</code>, <code>backups</code></li>
+            <li>Configure NFS export (or bind mount only if no other VMs yet)</li>
+          </ol>
+        </div>
+        <div class="phase">
+          <div class="label">Phase 2 · Maktaba migration</div>
+          <h3>Move media off root disk</h3>
+          <ol>
+            <li>Wire bind mount: <code>pct set &lt;ctid&gt; -mp1 ...</code></li>
+            <li><code>docker compose stop tubearchivist jellyfin</code></li>
+            <li><code>rsync -aH data/media/</code> to new mount (if migrating in-place)</li>
+            <li>Verify file count, restart stack</li>
+            <li>Confirm <code>df -h /</code> drops to ~55%</li>
+          </ol>
+        </div>
+        <div class="phase">
+          <div class="label">Phase 3 · Harden</div>
+          <h3>Disconnect handling &amp; monitoring</h3>
+          <ol>
+            <li>udev rule: stop containers on USB remove, restart on reconnect</li>
+            <li>Extend <code>healthcheck.sh</code> — warn if mount missing</li>
+            <li>Enable SMART monitoring</li>
+            <li>Update <code>documentation/handoff.md</code></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="diagram">
+        <div class="mermaid">
+sequenceDiagram
+  participant Admin
+  participant Host as Proxmox Host
+  participant USB as USB Drive
+  participant CT as maktaba LXC
+  participant TA as TubeArchivist
+
+  Admin->>Host: format + fstab mount
+  Host->>USB: mount /mnt/usb-data
+  Admin->>Host: pct set bind mount
+  Host->>CT: /srv/maktaba/data/media
+  Admin->>CT: rsync media + restart
+  CT->>TA: writes to USB path
+  Note over USB,TA: ES/Redis stay on local disk
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Maktaba media server · Generated 2026-08-24</p>
+      <p style="margin-top:.5rem">
+        Live stack: <code>/srv/maktaba</code> ·
+        <a href="./handoff.md">handoff.md</a> ·
+        <a href="../README.md">README.md</a>
+      </p>
+      <p style="margin-top:.5rem;font-size:.75rem">
+        Open in Brave: <a href="http://docs.maktaba.home/usb-storage-plan.html">http://docs.maktaba.home/usb-storage-plan.html</a>
+        · <a href="http://docs.maktaba.home/">all docs</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#1a2332',
+        primaryTextColor: '#e6edf3',
+        primaryBorderColor: '#58a6ff',
+        lineColor: '#58a6ff',
+        secondaryColor: '#243044',
+        tertiaryColor: '#0f1419',
+        background: '#1a2332',
+        mainBkg: '#1a2332',
+        nodeBorder: '#58a6ff',
+        clusterBkg: '#243044',
+        clusterBorder: '#2d3a4f',
+        titleColor: '#e6edf3',
+        edgeLabelBackground: '#1a2332'
+      }
+    });
+  </script>
+</body>
+</html>
