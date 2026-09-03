@@ -20,6 +20,7 @@ Live configs, compose files, and secrets stay **on the servers** (`/srv/maktaba`
 | [`docs/maktaba/`](docs/maktaba/) | Media stack (Jellyfin, TubeArchivist, USB/NFS, DNS) |
 | [`docs/vaultwarden/`](docs/vaultwarden/) | Password manager ops + remote access |
 | [`docs/infrastructure/`](docs/infrastructure/) | Network topology, Proxmox, shared storage |
+| [`docs/popular-homelab-projects.md`](docs/popular-homelab-projects.md) | Community top-10 + mentions (candidates, not deploy plan) |
 
 ## Conventions
 
