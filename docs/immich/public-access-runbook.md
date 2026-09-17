@@ -23,6 +23,17 @@ Do not put guest emails on the permanent **immich-household** policy.
 
 ---
 
+## Tunnel token file permissions
+
+`cloudflared` runs as a non-root user and must be able to read the Docker secret:
+
+```bash
+chmod 644 /srv/immich/secrets/tunnel_token.txt
+# directory should stay restricted; do not commit this file
+```
+
+If logs show `permission denied` on `/run/secrets/tunnel_token`, fix perms and `docker compose up -d cloudflared`.
+
 ## Phone setup (household)
 
 No Tailscale or local CA required for the public URL.

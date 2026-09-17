@@ -29,9 +29,9 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 | 4 | Wire Caddy `photos.maktaba.home` on Vaultwarden edge | ✅ done 2026-09-06 | vault `/alive` OK after reload |
 | 5 | Schedule Postgres backup at 02:30, REGISTRY → live | ✅ done 2026-09-06 | Cron + smoke backup 18M OK |
 | 6 | Optional: dedicated NFS export `wdred/immich/library` (move off shared) | ⬜ later | [setup-plan.md](./immich/setup-plan.md) |
-| 7 | Cloudflare Tunnel `maktaba-immich` + DNS `photos.homz.fyi` | ⬜ | [public-access-plan.md](./immich/2026-09-08-public-access-plan.md) |
-| 8 | `cloudflared` in Immich compose + healthcheck | ⬜ | [public-access-plan.md](./immich/2026-09-08-public-access-plan.md) |
-| 9 | Access app + `immich-household` / `immich-guests` + `immich-mobile` service token | ⬜ | [public-access-plan.md](./immich/2026-09-08-public-access-plan.md) |
+| 7 | Cloudflare Tunnel `maktaba-immich` + DNS `photos.homz.fyi` | ✅ done 2026-09-08 | [public-access-runbook.md](./immich/public-access-runbook.md) · [access-setup-checklist.md](./immich/access-setup-checklist.md) |
+| 8 | `cloudflared` in Immich compose + healthcheck | ✅ done 2026-09-08 | [public-access-plan.md](./immich/2026-09-08-public-access-plan.md) |
+| 9 | Access app + `immich-household` / `immich-guests` + `immich-mobile` service token | ⬜ | [access-setup-checklist.md](./immich/access-setup-checklist.md) |
 | 10 | Immich hardening (registration off, public external URL) | ⬜ | [public-access-plan.md](./immich/2026-09-08-public-access-plan.md) |
 | 11 | Zone rate limit for `photos.homz.fyi` | ⬜ | [operations.md](./immich/operations.md) |
 | 12 | Docs / topology / runbook for public access | ✅ done 2026-09-08 | [public-access-runbook.md](./immich/public-access-runbook.md) · [operations.md](./immich/operations.md) |
@@ -47,7 +47,8 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 | 4 | Seed services YAML for Jellyfin / TA / Immich / Vaultwarden | ✅ done 2026-09-17 | [setup-plan.md](./homepage/setup-plan.md) |
 | 5 | REGISTRY → live + `docs/homepage/operations.md` | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
 | 6 | Docker discovery + search/datetime/resources widgets | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
-| 7 | Optional: service API widgets + docker-socket-proxy | ⬜ later | [setup-plan.md](./homepage/setup-plan.md) |
+| 7 | wdred USB (~4TB) disk resources widget | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
+| 8 | Optional: service API widgets + docker-socket-proxy | ⬜ later | [setup-plan.md](./homepage/setup-plan.md) |
 
 ## Forgejo
 
@@ -63,7 +64,8 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 
 | Date | Item |
 | --- | --- |
-| 2026-09-17 | Homepage live — `https://home.maktaba.home`, Docker status + widgets, Caddy + vault neighbor OK |
+| 2026-09-17 | Homepage live — `https://home.maktaba.home`, Docker status + wdred disk widget, Caddy + vault neighbor OK |
+| 2026-09-08 | Immich tunnel live — `photos.homz.fyi` + `cloudflared` in compose (Access / rate limit / e2e still open) |
 | 2026-09-08 | Immich public-access docs — runbook, dual URLs, topology Tunnel + Access |
 | 2026-09-07 | Forgejo planned — REGISTRY + setup-plan + topology (`git.maktaba.home`) |
 | 2026-09-07 | Homepage planned — REGISTRY + setup-plan + topology (`home.maktaba.home`) |

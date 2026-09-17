@@ -6,8 +6,9 @@
 
 1. Read [`docs/TASKS.md`](docs/TASKS.md) for open items.
 2. Confirm the service row in [`projects/REGISTRY.md`](projects/REGISTRY.md).
-3. For maktaba sessions: read [`docs/maktaba/handoff.md`](docs/maktaba/handoff.md) first.
-4. Execute on the **live server** — this repo has docs only, no compose or secrets.
+3. For network layout: [`docs/infrastructure/topology.yaml`](docs/infrastructure/topology.yaml) is SoT — regenerate with `python3 scripts/render-topology.py`.
+4. For maktaba sessions: read [`docs/maktaba/handoff.md`](docs/maktaba/handoff.md) first.
+5. Execute on the **live server** — this repo has docs only, no compose or secrets.
 
 ## Who owns what
 

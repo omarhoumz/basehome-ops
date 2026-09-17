@@ -43,7 +43,7 @@ docker compose down
 | `services.yaml` | App tiles + optional `server`/`container` for Docker status |
 | `docker.yaml` | Docker socket target (`local`) |
 | `bookmarks.yaml` | Extra bookmarks |
-| `widgets.yaml` | Search, datetime, resources |
+| `widgets.yaml` | Search, datetime, system resources, **wdred** disk |
 
 ---
 
@@ -63,7 +63,11 @@ curl -k -sf https://vault.maktaba.home/alive
 ## Scope
 
 - Docker socket mounted **read-only** for container status on tiles (Jellyfin, TA, Immich, Vaultwarden).
-- Widgets: DuckDuckGo search, datetime, container resources — no API keys yet.
+- Widgets: DuckDuckGo search, datetime, container resources, **wdred** disk (`/mnt/wdred` ← NFS `shared`, ~3.7T).
 - Service API widgets (Immich/Jellyfin stats) later via `HOMEPAGE_VAR_*` in `.env` (chmod 600).
 - Harden later with [docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy) if desired.
 - Forgejo tile points at planned `git.maktaba.home` until Forgejo is live.
+
+### wdred disk widget
+
+Compose mounts host `/mnt/wdred/shared` → container `/mnt/wdred:ro` (same 3.7T USB as media + Immich library). Usage shown is the whole NFS export, not a separate partition.

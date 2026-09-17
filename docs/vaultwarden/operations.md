@@ -87,40 +87,53 @@ To roll back, stop vaultwarden again and copy the `db.sqlite3.before-restore-*` 
 
 ## Trust Caddy local CA on other devices
 
-Caddy uses an internal CA (`tls internal`) for `vault.maktaba.home`. Browsers on devices that have not trusted this CA will show a certificate warning.
+Caddy uses an internal CA (`tls internal`) for `vault.maktaba.home` and `photos.maktaba.home` (same reverse proxy). Browsers show a warning; Immich and other apps usually **refuse** until the CA is trusted.
 
-The root certificate lives on the server at:
+**Root certificate (in the Caddy data volume):**
 
 ```
-/srv/vaultwarden/caddy/data/pki/authorities/local/root.crt
+/srv/vaultwarden/caddy/data/caddy/pki/authorities/local/root.crt
 ```
 
-Copy it to each client device and install it as a trusted root CA.
+(Host path may be root-only; export with:  
+`docker cp vaultwarden-caddy:/data/caddy/pki/authorities/local/root.crt ~/maktaba-home-ca.crt`)
 
-### Linux (this VM — already trusted by Caddy on first start)
+Install that file as a **trusted CA** on each device. One install covers vault + photos.
+
+### Linux (this VM)
 
 ```bash
-sudo cp /srv/vaultwarden/caddy/data/pki/authorities/local/root.crt \
-        /usr/local/share/ca-certificates/vaultwarden-local.crt
+docker cp vaultwarden-caddy:/data/caddy/pki/authorities/local/root.crt /tmp/maktaba-home-ca.crt
+sudo cp /tmp/maktaba-home-ca.crt /usr/local/share/ca-certificates/maktaba-home-ca.crt
 sudo update-ca-certificates
+curl -fsS https://photos.maktaba.home/api/server/ping   # should work without -k
 ```
 
 ### macOS
 
-1. Copy `root.crt` to the Mac (AirDrop, scp, etc.)
-2. Double-click → Keychain Access → add to System keychain
-3. Find the cert → Get Info → Trust → Always Trust
+1. Copy `maktaba-home-ca.crt` to the Mac (AirDrop, scp, etc.)
+2. Double-click → Keychain Access → add to **System** keychain
+3. Find the cert → Get Info → Trust → **Always Trust**
 
 ### Windows
 
-1. Copy `root.crt` to the PC
-2. Run `certmgr.msc` → Trusted Root Certification Authorities → Import
+1. Copy the `.crt` to the PC
+2. `certmgr.msc` → Trusted Root Certification Authorities → Import
 
-### Android / iOS
+### Android (needed for Immich auto-backup)
 
-Install the cert via Settings → Security → Install certificate (exact path varies by OS version). You may also need to add `vault.maktaba.home` to DNS or `/etc/hosts` pointing at the server IP.
+1. Get `maktaba-home-ca.crt` onto the phone (USB, Drive, Messages, etc.)
+2. Settings → Security → Encryption & credentials → **Install a certificate** → **CA certificate**
+3. Select the file → confirm the warning (expected for a home CA)
+4. Keep **Tailscale** connected
+5. Open Immich → `https://photos.maktaba.home` → log in → enable backup  
+   (Browser check: `https://vault.maktaba.home` should load without a warning)
 
-After trusting the CA, `https://vault.maktaba.home` should load without warnings.
+### iOS
+
+Settings → General → VPN & Device Management (or Profile Downloaded) after opening the `.crt` → Install → enable Full Trust for the root under Certificate Trust Settings.
+
+After trusting the CA, HTTPS to vault and photos should work without warnings.
 
 ---
 

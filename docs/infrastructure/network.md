@@ -1,32 +1,29 @@
 # Network topology
 
-```
-Internet → ISP router (192.168.11.1)
-              └─ LAN 192.168.11.0/24
-                    ├─ Proxmox pve (192.168.11.123, TS 100.91.123.54)
-                    │     └─ USB wdred 3.7T at /mnt/pve/wdred
-                    │           ├─ NFS maktaba/media → maktaba VM
-                    │           └─ NFS shared → maktaba VM
-                    └─ Kubuntu maktaba VM (192.168.11.141, TS 100.68.38.53)
-                          ├─ Docker: Jellyfin, TubeArchivist, Caddy, …
-                          ├─ dnsmasq (*.maktaba.home → 100.68.38.53)
-                          └─ Vaultwarden stack
+**Canonical map:** edit [`topology.yaml`](./topology.yaml), then regenerate:
+
+```bash
+python3 scripts/render-topology.py
 ```
 
-## DNS
+| Output | Audience |
+| --- | --- |
+| [`topology.md`](./topology.md) | Humans + agents (tables, ASCII tree) |
+| [`topology.html`](./topology.html) | Humans (scan page + Mermaid) |
 
-- **LAN:** Tailscale split DNS — nameserver `100.68.38.53` for domain `maktaba.home`
-- **On maktaba:** dnsmasq binds LAN + Tailscale IP; all `*.maktaba.home` → `100.68.38.53`
-- Router DHCP DNS to maktaba optional; Tailscale is primary path for owned devices
+Do **not** hand-edit the generated MD/HTML.
 
-## Remote access
+## Quick facts
 
-- **Default:** Tailscale mesh (no port-forward)
-- **Not exposed:** Jellyfin, TubeArchivist, Vaultwarden directly to internet
-- See [vaultwarden remote-access](../vaultwarden/remote-access.md) for VPN options
+- **LAN:** `192.168.11.0/24` · gateway `192.168.11.1`
+- **Proxmox pve:** `192.168.11.123` · TS `100.91.123.54`
+- **Kubuntu maktaba VM:** `192.168.11.141` · TS `100.68.38.53`
+- **DNS:** Tailscale split DNS · `*.maktaba.home` → `100.68.38.53`
+- **Remote access:** Tailscale only — no app ports on the ISP router
 
-## Storage
+## Related
 
-- **VM disk (71G):** ES, redis, ta-cache, Jellyfin config, compose, secrets
-- **USB via NFS:** `data/media` (~38G+), `/mnt/wdred/shared` for future VMs
-- See [usb-wdred-runbook](../maktaba/usb-wdred-runbook.md)
+- [usb-wdred-runbook](../maktaba/usb-wdred-runbook.md) — USB + NFS ops
+- [vaultwarden remote-access](../vaultwarden/remote-access.md) — VPN options
+- [Immich setup plan](../immich/setup-plan.md) — next service (planned)
+- [REGISTRY](../../projects/REGISTRY.md) — live service gate
