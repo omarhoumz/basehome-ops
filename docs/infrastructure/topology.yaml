@@ -158,13 +158,13 @@ services:
   - id: homepage
     name: Homepage
     host: maktaba-vm
-    status: planned
+    status: live
     url: https://home.maktaba.home
     live_path: /srv/homepage
     edge: vaultwarden-caddy (:443, tls internal)
     notes: >
-      Start-page dashboard (gethomepage). Config on VM SSD; optional Docker socket RO.
-      See docs/homepage/setup-plan.md.
+      Start-page dashboard (gethomepage). Docker socket RO for tile status;
+      search/datetime/resources widgets. See docs/homepage/operations.md.
 
   - id: forgejo
     name: Forgejo

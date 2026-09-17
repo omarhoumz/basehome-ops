@@ -285,7 +285,7 @@ flowchart TB
   vm --> vaultwarden["Vaultwarden<br/>https://vault.maktaba.home"]
   vm --> dnsmasq["dnsmasq<br/>*.maktaba.home"]
   vm --> immich["Immich<br/>https://photos.homz.fyi · https://photos.maktaba.home"]
-  vm --> homepage["Homepage · planned<br/>https://home.maktaba.home"]
+  vm --> homepage["Homepage<br/>https://home.maktaba.home"]
   vm --> forgejo["Forgejo · planned<br/>https://git.maktaba.home"]
         </pre>
       </div>
@@ -381,13 +381,13 @@ flowchart TB
             <td><span class="badge badge-live">live</span></td>
             <td>Public: photos.homz.fyi via tunnel maktaba-immich + Access (OTP / service token). Admin: photos.maktaba.home on Tailscale. Library on shared/immich/library (NFS); Postgres on VM disk. Cgroup memory limits (~6.25G). Vaultwarden not on this tunnel. See docs/immich/operations.md and docs/immich/public-access-runbook.md.</td>
           </tr>
-          <tr class="status-planned">
+          <tr class="status-live">
             <td><strong>Homepage</strong></td>
             <td><a href="https://home.maktaba.home">https://home.maktaba.home</a></td>
             <td><code>/srv/homepage</code></td>
             <td>vaultwarden-caddy (:443, tls internal)</td>
-            <td><span class="badge badge-planned">planned</span></td>
-            <td>Start-page dashboard (gethomepage). Config on VM SSD; optional Docker socket RO. See docs/homepage/setup-plan.md.</td>
+            <td><span class="badge badge-live">live</span></td>
+            <td>Start-page dashboard (gethomepage). Docker socket RO for tile status; search/datetime/resources widgets. See docs/homepage/operations.md.</td>
           </tr>
           <tr class="status-planned">
             <td><strong>Forgejo</strong></td>

@@ -19,8 +19,24 @@ Live configs, compose files, and secrets stay **on the servers** (`/srv/maktaba`
 | --- | --- |
 | [`docs/maktaba/`](docs/maktaba/) | Media stack (Jellyfin, TubeArchivist, USB/NFS, DNS) |
 | [`docs/vaultwarden/`](docs/vaultwarden/) | Password manager ops + remote access |
-| [`docs/infrastructure/`](docs/infrastructure/) | Network topology, Proxmox, shared storage |
+| [`docs/immich/`](docs/immich/) | Photo library — [operations](docs/immich/operations.md) |
+| [`docs/homepage/`](docs/homepage/) | Start-page dashboard — [operations](docs/homepage/operations.md) |
+| [`docs/forgejo/`](docs/forgejo/) | Self-hosted Git forge (planned) — [setup-plan](docs/forgejo/setup-plan.md) |
+| [`docs/infrastructure/`](docs/infrastructure/) | Topology SoT + network pointers |
 | [`docs/popular-homelab-projects.md`](docs/popular-homelab-projects.md) | Community top-10 + mentions (candidates, not deploy plan) |
+
+### Topology (source of truth)
+
+Edit [`docs/infrastructure/topology.yaml`](docs/infrastructure/topology.yaml), then:
+
+```bash
+python3 scripts/render-topology.py
+```
+
+| Output | For |
+| --- | --- |
+| [`topology.md`](docs/infrastructure/topology.md) | Humans + agents |
+| [`topology.html`](docs/infrastructure/topology.html) | Scan page |
 
 ## Conventions
 

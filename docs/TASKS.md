@@ -41,11 +41,13 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 
 | # | Task | Status | Doc |
 | --- | --- | --- | --- |
-| 1 | Create project repo (`~/git/projects/homepage`) + `/srv/homepage/config` | ⬜ | [setup-plan.md](./homepage/setup-plan.md) |
-| 2 | Bring up stack on `vaultwarden_default` (no host `:3000`) | ⬜ | [setup-plan.md](./homepage/setup-plan.md) |
-| 3 | Wire Caddy `home.maktaba.home`; validate vault `/alive` | ⬜ | [setup-plan.md](./homepage/setup-plan.md) |
-| 4 | Seed services YAML for Jellyfin / TA / Immich / Vaultwarden | ⬜ | [setup-plan.md](./homepage/setup-plan.md) |
-| 5 | REGISTRY → live + `docs/homepage/operations.md` | ⬜ | [REGISTRY.md](../projects/REGISTRY.md) |
+| 1 | Create project repo (`~/git/projects/homepage`) + `/srv/homepage/config` | ✅ done 2026-09-17 | [setup-plan.md](./homepage/setup-plan.md) |
+| 2 | Bring up stack on `vaultwarden_default` (no host `:3000`) | ✅ done 2026-09-17 | [setup-plan.md](./homepage/setup-plan.md) |
+| 3 | Wire Caddy `home.maktaba.home`; validate vault `/alive` | ✅ done 2026-09-17 | [setup-plan.md](./homepage/setup-plan.md) |
+| 4 | Seed services YAML for Jellyfin / TA / Immich / Vaultwarden | ✅ done 2026-09-17 | [setup-plan.md](./homepage/setup-plan.md) |
+| 5 | REGISTRY → live + `docs/homepage/operations.md` | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
+| 6 | Docker discovery + search/datetime/resources widgets | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
+| 7 | Optional: service API widgets + docker-socket-proxy | ⬜ later | [setup-plan.md](./homepage/setup-plan.md) |
 
 ## Forgejo
 
@@ -61,6 +63,7 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 
 | Date | Item |
 | --- | --- |
+| 2026-09-17 | Homepage live — `https://home.maktaba.home`, Docker status + widgets, Caddy + vault neighbor OK |
 | 2026-09-08 | Immich public-access docs — runbook, dual URLs, topology Tunnel + Access |
 | 2026-09-07 | Forgejo planned — REGISTRY + setup-plan + topology (`git.maktaba.home`) |
 | 2026-09-07 | Homepage planned — REGISTRY + setup-plan + topology (`home.maktaba.home`) |

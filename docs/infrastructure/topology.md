@@ -25,7 +25,7 @@ Internet → ISP router (192.168.11.1)
                           ├─ Vaultwarden: https://vault.maktaba.home
                           ├─ dnsmasq: *.maktaba.home
                           ├─ Immich: https://photos.homz.fyi · https://photos.maktaba.home
-                          ├─ Homepage [planned]: https://home.maktaba.home
+                          ├─ Homepage: https://home.maktaba.home
                           └─ Forgejo [planned]: https://git.maktaba.home
 ```
 
@@ -45,7 +45,7 @@ Internet → ISP router (192.168.11.1)
 | Vaultwarden | https://vault.maktaba.home | `/srv/vaultwarden` | vaultwarden-caddy (:443, tls internal) | live | Tailscale-only; daily SQLite backups |
 | dnsmasq | *.maktaba.home | `/etc/dnsmasq.d/maktaba.conf` | — | live | Split-DNS nameserver for Tailscale |
 | Immich | https://photos.homz.fyi · https://photos.maktaba.home | `/srv/immich` | Cloudflare Tunnel (public) + vaultwarden-caddy (admin) | live | Public: photos.homz.fyi via tunnel maktaba-immich + Access (OTP / service token). Admin: photos.maktaba.home on Tailscale. Library on shared/immich/library (NFS); Postgres on VM disk. Cgroup memory limits (~6.25G). Vaultwarden not on this tunnel. See docs/immich/operations.md and docs/immich/public-access-runbook.md. |
-| Homepage | https://home.maktaba.home | `/srv/homepage` | vaultwarden-caddy (:443, tls internal) | planned | Start-page dashboard (gethomepage). Config on VM SSD; optional Docker socket RO. See docs/homepage/setup-plan.md. |
+| Homepage | https://home.maktaba.home | `/srv/homepage` | vaultwarden-caddy (:443, tls internal) | live | Start-page dashboard (gethomepage). Docker socket RO for tile status; search/datetime/resources widgets. See docs/homepage/operations.md. |
 | Forgejo | https://git.maktaba.home | `/srv/forgejo` | vaultwarden-caddy (:443, tls internal) | planned | Self-hosted Git forge. Postgres + repos on VM SSD; HTTPS git day one; no runner yet. See docs/forgejo/setup-plan.md. |
 
 ## Storage (wdred)

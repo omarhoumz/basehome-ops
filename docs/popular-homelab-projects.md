@@ -7,6 +7,7 @@ Community-ranked shortlist for what to run next. Primary ranking: **2025 Self-Ho
 | Status | Meaning |
 | --- | --- |
 | live | Running on basehome (see registry) |
+| planned | Deploy plan exists; not live yet |
 | candidate | Worth considering |
 | skip / watch | Proprietary, overlap, or plumbing — note only |
 
@@ -15,7 +16,7 @@ Community-ranked shortlist for what to run next. Primary ranking: **2025 Self-Ho
 | # | Project | MVP votes | Status | Explainer |
 | --- | --- | --- | --- | --- |
 | 1 | [Jellyfin](https://jellyfin.org) | 188 | live (maktaba) | Open-source media server for movies, TV, and music. Most-cited “can’t live without” app in 2025 surveys; Plex alternative with no paywall. |
-| 2 | [Immich](https://immich.app) | 156 | candidate | Google Photos replacement: mobile backup, face recognition, albums. Highest “new in 2025” adoption; needs solid storage + RAM for ML. |
+| 2 | [Immich](https://immich.app) | 156 | live | Google Photos replacement. Live at `photos.maktaba.home` with cgroup RAM caps; see [operations](./immich/operations.md). |
 | 3 | [Home Assistant](https://www.home-assistant.io) | 122 | candidate | Local smart-home hub for lights, sensors, Zigbee/Z-Wave/Matter. Best as HAOS VM on Proxmox when you want full add-ons. |
 | 4 | [Vaultwarden](https://github.com/dani-garcia/vaultwarden) | 92 | live | Lightweight Bitwarden-compatible password server. Often the first self-host win; browser/mobile clients already exist. |
 | 5 | [Plex](https://www.plex.tv) | 78 | skip / watch | Proprietary media server still widely used. Strong clients/remote features; overlap with Jellyfin already live — only if a client gap appears. |
@@ -41,6 +42,8 @@ Community-ranked shortlist for what to run next. Primary ranking: **2025 Self-Ho
 | [Traefik](https://traefik.io) | Reverse proxy | Label-driven proxy popular with Docker Compose; more “config as code” than NPM. |
 | [Portainer](https://www.portainer.io) / [Dockge](https://github.com/louislam/dockge) | Container UI | Web UI for Docker; Dockge is compose-file–first and lighter. |
 | [Uptime Kuma](https://uptime.kuma.pet) | Monitoring | Simple uptime checks and alerts for every service URL. |
+| [Homepage](https://gethomepage.dev) | Start page / dashboard | YAML dashboard with service links. **live** at `home.maktaba.home` — see [operations](./homepage/operations.md). |
+| [Forgejo](https://forgejo.org) | Git forge | Lightweight self-hosted GitHub alternative (Gitea fork). **planned** for basehome — see [setup-plan](./forgejo/setup-plan.md). |
 | [Syncthing](https://syncthing.net) | File sync | Peer-to-peer folder sync without a central cloud; lighter than Nextcloud for “just sync these dirs.” |
 | [Authentik](https://goauthentik.io) | SSO / IdP | Single sign-on in front of many apps once the service count grows. |
 | *arr + [Jellyseerr](https://github.com/Fallenbagel/jellyseerr) | Media requests | Request UI for friends/family; Jellyseerr is the Jellyfin-oriented Overseerr fork. |
