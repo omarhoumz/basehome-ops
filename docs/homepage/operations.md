@@ -9,6 +9,7 @@ Start-page dashboard at `https://home.maktaba.home` (Tailscale + Caddy `tls inte
 | **Config** | `/srv/homepage/config/` (YAML) |
 | **Edge** | `vaultwarden-caddy` → `homepage:3000` on `vaultwarden_default` |
 | **Access** | Tailscale-only (no public tunnel) |
+| **Docker API** | `homepage_dockerproxy` (Tecnativa) → Homepage; **no** raw socket in Homepage |
 
 ---
 
@@ -18,7 +19,7 @@ Start-page dashboard at `https://home.maktaba.home` (Tailscale + Caddy `tls inte
 ~/git/projects/homepage/healthcheck.sh
 ```
 
-Checks: container running, HTTPS endpoint, vault neighbor `/alive`.
+Checks: homepage + dockerproxy running, HTTPS endpoint, vault neighbor `/alive`.
 
 ---
 
@@ -35,15 +36,28 @@ docker compose down
 ## Edit links / widgets
 
 1. Edit YAML under `/srv/homepage/config/` (or sync from `~/git/projects/homepage/config/`).
-2. Homepage reloads most config automatically; recreate the container after compose changes (e.g. Docker socket).
+2. Homepage reloads most config automatically; recreate after compose changes.
 
 | File | Purpose |
 | --- | --- |
 | `settings.yaml` | Title, theme, layout |
-| `services.yaml` | App tiles + optional `server`/`container` for Docker status |
-| `docker.yaml` | Docker socket target (`local`) |
+| `services.yaml` | App tiles + `server`/`container` for Docker status |
+| `docker.yaml` | Points at `dockerproxy:2375` (not host socket) |
 | `bookmarks.yaml` | Extra bookmarks |
 | `widgets.yaml` | Search, datetime, system resources, **wdred** disk |
+
+---
+
+## Docker socket proxy
+
+Only `homepage_dockerproxy` mounts `/var/run/docker.sock:ro`. Homepage talks to it over the Docker network (`CONTAINERS=1`, `POST=0`). Port **2375 is not published** on the host.
+
+```yaml
+# docker.yaml
+local:
+  host: dockerproxy
+  port: 2375
+```
 
 ---
 
@@ -62,10 +76,9 @@ curl -k -sf https://vault.maktaba.home/alive
 
 ## Scope
 
-- Docker socket mounted **read-only** for container status on tiles (Jellyfin, TA, Immich, Vaultwarden).
-- Widgets: DuckDuckGo search, datetime, container resources, **wdred** disk (`/mnt/wdred` ← NFS `shared`, ~3.7T).
-- Service API widgets (Immich/Jellyfin stats) later via `HOMEPAGE_VAR_*` in `.env` (chmod 600).
-- Harden later with [docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy) if desired.
+- Container status via **docker-socket-proxy** (not a direct socket mount on Homepage).
+- Widgets: DuckDuckGo search, datetime, resources, **wdred** disk (`/mnt/wdred` ← NFS `shared`, ~3.7T).
+- Service API widgets: see [2026-09-17-service-api-widgets-plan.md](./2026-09-17-service-api-widgets-plan.md).
 - Forgejo tile points at planned `git.maktaba.home` until Forgejo is live.
 
 ### wdred disk widget

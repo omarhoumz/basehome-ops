@@ -21,7 +21,7 @@ YAML-configured application dashboard (start page) for the homelab: bookmarks, D
 | 4 | **URL** `https://home.maktaba.home` | Clear start-page hostname on existing `*.maktaba.home` |
 | 5 | **HTTPS via vaultwarden-caddy `:443`** | Reuse local CA; validate with vault `/alive` after reload |
 | 6 | **Tailscale-only day one** | No ISP port-forward; private dashboard |
-| 7 | **Docker socket read-only for tile status** | Day-one static links; Phase 4 mounts socket `:ro` for container status. Prefer socket proxy later if hardening |
+| 7 | **Docker API via Tecnativa socket proxy** | Homepage has no raw socket; `homepage_dockerproxy` with `CONTAINERS=1` `POST=0`; not published on host |
 | 8 | **No NFS needed** | Config + cache are tiny; stay on VM SSD |
 
 ---
@@ -155,7 +155,7 @@ API keys for Immich / Vaultwarden widgets use `HOMEPAGE_VAR_*` / `HOMEPAGE_FILE_
 3. Update REGISTRY `planned` → `live` the same day.
 
 ### Phase 4 — Widgets + Docker discovery
-1. Mount Docker socket `:ro`; add `docker.yaml` + `server`/`container` on live tiles.
-2. Search / datetime / resources widgets (no API keys).
+1. ~~Mount Docker socket `:ro`~~ → replaced by **docker-socket-proxy** (`homepage_dockerproxy`).
+2. Search / datetime / resources / wdred disk widgets.
 3. Document ops in `docs/homepage/operations.md`.
-4. Later: service API widgets via `HOMEPAGE_VAR_*`; prefer docker-socket-proxy for hardening.
+4. Service API widgets: [2026-09-17-service-api-widgets-plan.md](./2026-09-17-service-api-widgets-plan.md).

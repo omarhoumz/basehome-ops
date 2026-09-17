@@ -48,7 +48,8 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 | 5 | REGISTRY → live + `docs/homepage/operations.md` | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
 | 6 | Docker discovery + search/datetime/resources widgets | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
 | 7 | wdred USB (~4TB) disk resources widget | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
-| 8 | Optional: service API widgets + docker-socket-proxy | ⬜ later | [setup-plan.md](./homepage/setup-plan.md) |
+| 8 | docker-socket-proxy (Homepage no longer mounts raw socket) | ✅ done 2026-09-17 | [operations.md](./homepage/operations.md) |
+| 9 | Optional: service API widgets (Jellyfin / Immich / TA) | ⬜ planned | [2026-09-17-service-api-widgets-plan.md](./homepage/2026-09-17-service-api-widgets-plan.md) |
 
 ## Forgejo
 
@@ -64,6 +65,7 @@ Cross-service open work. Service-specific detail in each project's handoff/ops d
 
 | Date | Item |
 | --- | --- |
+| 2026-09-17 | Homepage docker-socket-proxy — raw socket removed from Homepage container |
 | 2026-09-17 | Homepage live — `https://home.maktaba.home`, Docker status + wdred disk widget, Caddy + vault neighbor OK |
 | 2026-09-08 | Immich tunnel live — `photos.homz.fyi` + `cloudflared` in compose (Access / rate limit / e2e still open) |
 | 2026-09-08 | Immich public-access docs — runbook, dual URLs, topology Tunnel + Access |
