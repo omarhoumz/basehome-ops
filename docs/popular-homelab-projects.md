@@ -56,3 +56,7 @@ Community-ranked shortlist for what to run next. Primary ranking: **2025 Self-Ho
 - [selfh.st 2025 survey results](https://selfh.st/survey/2025-results/)
 - [OSSAlt: Homelab software stack 2026](https://ossalt.com/guides/homelab-software-stack-guide-2026)
 - [NetBird: 10 self-hosted apps 2026](https://netbird.io/knowledge-hub/10-self-hosted-apps-2026)
+
+## More ideas to browse
+
+- [Level1Techs: A curated list of amazing open-source software you may have not heard of](https://forum.level1techs.com/t/a-curated-list-of-amazing-open-source-software-you-may-have-not-heard-of/196389) — long-tail picks beyond the survey favorites; check here when the shortlist above runs dry.
